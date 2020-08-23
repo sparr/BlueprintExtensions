@@ -14,6 +14,8 @@ function Util.get_blueprint(bp)
             else
                 return nil
             end
+        else
+            return nil
         end
     end
     return nil
