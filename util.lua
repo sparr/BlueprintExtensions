@@ -4,14 +4,17 @@ local Util = {}
 
 -- Returns the item if it is a blueprint, the selected blueprint in the book if it is a blueprint book, or nil.
 function Util.get_blueprint(bp)
-    if not (bp and bp.valid and bp.valid_for_read) then
-        return nil
-    end
-    if bp.is_blueprint_book and bp.active_index then
-        return Util.get_blueprint(bp.get_inventory(defines.inventory.item_main)[bp.active_index])
-    end
-    if bp.is_blueprint then
-        return bp
+    while (bp and bp.valid and bp.valid_for_read) do
+        if bp.is_blueprint then
+            return bp
+        elseif bp.is_blueprint_book and bp.active_index then
+            local inventory = bp.get_inventory(defines.inventory.item_main)
+            if bp.active_index <= #inventory then
+                bp = inventory[bp.active_index]
+            else
+                return nil
+            end
+        end
     end
     return nil
 end
